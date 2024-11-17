@@ -1,5 +1,7 @@
 import { DM_Sans } from 'next/font/google';
 import "./globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
+import { shadesOfPurple } from '@clerk/themes'
 
 const dm = DM_Sans({ subsets: ['latin'] });
 
@@ -10,10 +12,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
+    <ClerkProvider dynamic appearance={{
+      baseTheme: shadesOfPurple,
+    }}>
     <html lang="en">
       <body className={`${dm.className} antialiased text-white bg-slate-900`}>
         {children}
       </body>
     </html>
+    </ClerkProvider>
   );
 }

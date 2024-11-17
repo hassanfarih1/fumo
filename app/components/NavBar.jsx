@@ -2,19 +2,15 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { FaCrown, FaUser, FaBars, FaTimes } from 'react-icons/fa';
-import SignUp from './SignUp';
+import { FaCrown, FaBars, FaTimes } from 'react-icons/fa';
+import { UserButton, useAuth } from '@clerk/nextjs';
 
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showSignUp, setShowSignUp] = useState(false);
+  const { isSignedIn } = useAuth();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-  };
-
-  const handleSignUpClick = () => {
-    setShowSignUp(true);
   };
 
   return (
@@ -30,19 +26,24 @@ export default function NavBar() {
       </Link>
 
       <div className="hidden md:flex space-x-4">
+       
         <Link href="/pricing">
-          <button className="flex items-center px-4 py-2 rounded-lg hover:bg-gray-400 hover:bg-opacity-25">
+          <button className={`flex items-center px-4 py-2 rounded-lg hover:bg-gray-400 hover:bg-opacity-25 ${isSignedIn ? 'text-sm' : ''}`}>
             <FaCrown className="text-yellow-400 mr-2" />
             Try Premium
           </button>
         </Link>
-        <button
-          onClick={handleSignUpClick}
-          className="flex items-center px-4 py-2 rounded-lg hover:bg-gray-400 hover:bg-opacity-25"
-        >
-          <FaUser className="mr-2" />
-          Sign-Up / Sign-In
-        </button>
+
+        
+        {isSignedIn ? (
+          <UserButton afterSignOutUrl="/" />
+        ) : (
+          <Link href="/sign-in">
+            <button className="flex items-center px-4 py-2 rounded-lg hover:bg-gray-400 hover:bg-opacity-25">
+              Sign-Up / Sign-In
+            </button>
+          </Link>
+        )}
       </div>
 
       <button
@@ -60,17 +61,19 @@ export default function NavBar() {
               Try Premium
             </button>
           </Link>
-          <button
-            onClick={handleSignUpClick}
-            className="flex items-center px-4 py-2 rounded-lg hover:bg-gray-400 hover:bg-opacity-25"
-          >
-            <FaUser className="mr-2" />
-            Sign-Up / Sign-In
-          </button>
+          
+         
+          {isSignedIn ? (
+            <UserButton afterSignOutUrl="/" />
+          ) : (
+            <Link href="/sign-in">
+              <button className="flex items-center px-4 py-2 rounded-lg hover:bg-gray-400 hover:bg-opacity-25">
+                Sign-Up / Sign-In
+              </button>
+            </Link>
+          )}
         </div>
       )}
-
-      {showSignUp && <SignUp onClose={() => setShowSignUp(false)} />}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import Hero from "./components/Hero";
+import HeroWi from "./components/HeroWi";
 import NavBar from "./components/NavBar";
 
 
@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div>
       <NavBar/>
-      <Hero/>
+      <HeroWi/>
     </div>
   );
 }

@@ -8,12 +8,12 @@ export default function Hero() {
   const [imageUrl, setImageUrl] = useState(null);
   const [error, setError] = useState(null);
 
-  // Handle input change
+
   const handleInputChange = (e) => {
     setPrompt(e.target.value);
   };
 
-  // Handle button click to generate image
+
   const handleGenerateClick = async () => {
     if (!prompt) return;
 
@@ -32,7 +32,7 @@ export default function Hero() {
         {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer sk-oIdvZpYbmuMMx6t9b6nI7Ww3etA7srAesw2XCMIx0Lg4aDlr`,
+            'Authorization': `Bearer sk-w5u02f1hqxNLeDkCsPwpuNXn790qVjAqine9QFOqx11hxrTT`,
             'Accept': 'image/*',
           },
           body: formData, 
