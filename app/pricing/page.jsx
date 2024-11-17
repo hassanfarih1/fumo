@@ -66,7 +66,7 @@ export default function Page() {
       <NavBar />
       <div className="flex flex-col items-center justify-center text-center mt-16">
         <h1 className="text-5xl font-extrabold mb-4">
-          Start making amazing videos, today.
+          Start making amazing videos.<span className="underline text-primary text-6xl">Today!</span> 
         </h1>
         <h3 className="text-lg mb-6 text-gray-400">
           Start with 3 free videos. No credit card required.
