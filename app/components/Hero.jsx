@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 export default function Hero() {
@@ -8,11 +8,21 @@ export default function Hero() {
   const [imageUrl, setImageUrl] = useState(null);
   const [error, setError] = useState(null);
 
+  // Use effect to disable scrolling on loading
+  useEffect(() => {
+    if (loading) {
+      document.body.style.overflow = 'hidden'; // Disable scrolling
+    } else {
+      document.body.style.overflow = 'auto'; // Enable scrolling
+    }
+    return () => {
+      document.body.style.overflow = 'auto'; // Cleanup when loading is false
+    };
+  }, [loading]);
 
   const handleInputChange = (e) => {
     setPrompt(e.target.value);
   };
-
 
   const handleGenerateClick = async () => {
     if (!prompt) return;
@@ -55,7 +65,7 @@ export default function Hero() {
   };
 
   return (
-    <div className='flex flex-col justify-center text-center mt-16 space-y-5'>
+    <div className="flex flex-col justify-center text-center mt-16 space-y-5 relative z-10">
       <h1 className='text-3xl md:text-6xl font-black max-w-5xl mx-auto'>
         Unleash Your Creativity with <span className='text-primary'>AI Image Generation</span>
       </h1>
@@ -81,9 +91,18 @@ export default function Hero() {
 
       {error && <p className="text-red-500">{error}</p>}
 
+      {/* Loading Spinner & Blur Screen */}
+      {loading && (
+        <div className="absolute -top-96 inset-0 z-50 bg-black bg-opacity-50 backdrop-blur-sm">
+          <div className="absolute inset-0 flex justify-center items-center text-white">
+            <div className="border-t-4 border-white w-16 h-16 rounded-full animate-spin mb-4"></div>
+            <p className="text-xl">Generating...</p>
+          </div>
+        </div>
+      )}
+
       {imageUrl ? (
-        <div className="mt-4">
-          <h3 className="text-xl">Generated Image:</h3>
+        <div className="mt-4 flex justify-center">
           <div className="mt-2">
             <Image 
               src={imageUrl} 
