@@ -1,17 +1,42 @@
 'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { FaCrown, FaBars, FaTimes } from 'react-icons/fa';
-import { UserButton, useAuth } from '@clerk/nextjs';
+import { UserButton, useAuth, useUser } from '@clerk/nextjs';
 
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isSignedIn } = useAuth();
+  const { user } = useUser();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const saveUserToDB = useCallback(async () => {
+    if (user) {
+      const { id, emailAddresses } = user;
+      const email = emailAddresses[0]?.emailAddress || '';
+
+      try {
+        await fetch('/api/saveUser', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id, email }),
+        });
+      } catch (error) {
+        console.error('Failed to save user to DB:', error);
+      }
+    }
+  }, [user]);
+
+  useEffect(() => {
+    saveUserToDB();
+  }, [saveUserToDB]);
 
   return (
     <div className="flex items-center justify-between p-4 shadow-sm px-10 relative">
@@ -26,15 +51,17 @@ export default function NavBar() {
       </Link>
 
       <div className="hidden md:flex space-x-4">
-       
         <Link href="/pricing">
-          <button className={`flex items-center px-4 py-2 rounded-lg hover:bg-gray-400 hover:bg-opacity-25 ${isSignedIn ? 'text-sm' : ''}`}>
+          <button
+            className={`flex items-center px-4 py-2 rounded-lg hover:bg-gray-400 hover:bg-opacity-25 ${
+              isSignedIn ? 'text-sm' : ''
+            }`}
+          >
             <FaCrown className="text-yellow-400 mr-2" />
             Try Premium
           </button>
         </Link>
 
-        
         {isSignedIn ? (
           <UserButton afterSignOutUrl="/" />
         ) : (
@@ -61,8 +88,7 @@ export default function NavBar() {
               Try Premium
             </button>
           </Link>
-          
-         
+
           {isSignedIn ? (
             <UserButton afterSignOutUrl="/" />
           ) : (
