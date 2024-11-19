@@ -69,7 +69,7 @@ export default function Page() {
           Start making amazing videos.<span className="underline text-primary text-6xl">Today!</span> 
         </h1>
         <h3 className="text-lg mb-6 text-gray-400">
-          Start with 3 free videos. No credit card required.
+          Start free for new accounts. No credit card required.
         </h3>
         <div className="flex items-center space-x-4 mb-10">
           <span className={`text-lg ${!isYearly ? "font-bold" : "text-gray-500"}`}>
